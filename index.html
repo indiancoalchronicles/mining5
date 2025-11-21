@@ -1,0 +1,1458 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mining Exam">
+  <link rel="apple-touch-icon" href="https://img1.wsimg.com/isteam/ip/0bf70def-deca-417e-962f-b76f39b1865e/mine-haul-truck-banner.jpg">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GATE-style Mining Exam — 65 Qs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --accent:#FFD700;
+  --bg-panel: rgba(18,18,20,0.66);
+  --card-border: rgba(255,255,255,0.06);
+  --muted: rgba(255,255,255,0.84);
+  --correct: #28a745;
+  --wrong: #e5534b;
+
+  /* New legend colors */
+  --answered: #2ecc71;     /* green */
+  --review: #3498db;       /* blue */
+  --not-visited: #7f8c8d;  /* grey */
+  --not-answered: #e74c3c; /* red */
+}
+
+/* legend styling */
+.legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.legend div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend span {
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  border-radius: 3px;
+}
+
+/* count styles */
+.legend .count {
+  font-weight: 700;
+  margin-left: 6px;
+  color: var(--muted);
+}
+.legend .count.answered { color: var(--answered); }
+.legend .count.review { color: var(--review); }
+.legend .count.not-visited { color: var(--not-visited); }
+.legend .count.not-answered { color: var(--not-answered); }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{  height:100%;  font-family: "Times New Roman", Times, serif;  background:#fff;  color:#000;}
+
+.container-wrap{
+  min-height:100vh;
+  background-image: url('https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/background.png');
+  background-size:cover;background-position:center center;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.25),  rgba(255,255,255,0.40));z-index:0}
+.card{position:relative;z-index:2;background:var(--bg-panel);border-radius:14px;padding:18px;backdrop-filter:blur(8px);border:1px solid var(--card-border);box-shadow:0 20px 60px rgba(255,255,255,0.25);width:1100px;max-width:96%}
+.welcome{padding:30px;text-align:center}
+.welcome h1{color:var(--accent);margin-bottom:6px}
+.welcome p{color:var(--muted);margin-bottom:12px}
+.btn{padding:10px 16px;border-radius:8px;border:none;background:var(--accent);color:#000;font-weight:700;cursor:pointer;font-size:16px}
+.btn.ghost{padding:10px 16px;border-radius:8px;border:none;background:white;color:#000;font-weight:700;cursor:pointer;font-size:16px}
+.btn.gho{padding:10px 16px;border-radius:8px;border:none;background:#3498db;color:#000;font-weight:700;cursor:pointer;font-size:16px}
+.btn.ghos{padding:10px 16px;border-radius:8px;border:none;background:#D3B683;color:#000;font-weight:700;cursor:pointer;font-size:16px}
+.btn.ghostt{padding:10px 16px;border-radius:8px;border:none;background:#2ecc71;color:#000;font-weight:700;cursor:pointer;font-size:16px}
+.layout{display:flex;gap:16px;margin-top:12px}
+.left{flex:1 1 68%}
+.right{flex-basis:32%;min-width:260px}
+.qmeta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.qnum{font-size:14px;color:var(--muted)}
+
+/* === QUESTION AREA: FULL WHITE bg + black text for everything inside === */
+.qtext{
+  font-size:18px;
+  margin:10px 0;
+  line-height:1.35;
+  background: #ffffff;                 /* full white background */
+  color: #000;                         /* black text */
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  overflow:auto;
+}
+
+/* force tables and any inline-styled white-on-dark to become black-on-white inside question area
+   and give clear solid borders (th/td) */
+.qtext table,
+.qtext thead,
+.qtext tbody,
+.qtext tfoot,
+.qtext th,
+.qtext td,
+.qtext tr {
+  color: #000 !important;
+  background: #fff !important;
+  border-color: #000 !important;
+  border: 1px solid rgba(0,0,0,0.9) !important;
+  border-collapse: collapse !important;
+  padding:6px !important;
+}
+
+/* ensure table element itself uses border-collapse so lines are crisp */
+.qtext table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+/* header shading (subtle) but black text */
+.qtext thead th {
+  background: #f7f7f7 !important;
+  color: #000 !important;
+  font-weight:700 !important;
+}
+
+/* also ensure inline style colors inside options / questions render black */
+.qtext * { color: #000 !important; }
+
+.qtext img { border: none !important; } /* ensure any remaining img borders removed inside qtext */
+
+/* options - keep them readable and distinct */
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{
+  padding:10px 12px;border-radius:10px;
+  background: rgba(255,255,255,0.98);
+  border:1px solid rgba(0,0,0,0.06);
+  cursor:pointer;text-align:left;
+  color:#000;               /* black option text */
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.opt input{ margin-right:8px; }
+.opt.selected{outline:2px solid rgba(255,204,0,0.6)}
+.timer{font-weight:700;color:var(--accent);font-size:24px;text-align:right}
+.palette{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.pmini {width: 36px;  height: 36px;  border-radius: 8px;  background: var(--not-visited);  display: flex;  align-items: center;  justify-content: center;  cursor: pointer;  border: 1px solid rgba(255,255,255,0.04);  color: #fff;  font-weight: 600;}
+.pmini.answered {  background: var(--answered);}
+.pmini.not-answered {  background: var(--not-answered);}
+.pmini.review {  background: var(--review);  color: #fff;}
+.pmini.active{outline:3px solid rgba(255,204,0,0.4)}
+.controls{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.small{font-size:13px;color:var(--muted)}
+.submit-area{text-align:center;margin-top:12px}
+.result-wrap{text-align:center;margin-top:16px;color:var(--muted)}
+.review-ui{display:none;margin-top:18px}
+
+/* NEW: Make review UI white + black like question area */
+.review-ui{
+  background: #ffffff;
+  color: #000;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+/* ensure all text inside review UI is black & backgrounds white */
+.review-ui *{
+  color: #000 !important;
+  background: transparent !important;
+}
+
+/* ensure tables inside review area have the same black-on-white styling and solid borders */
+.review-ui table,
+.review-ui thead,
+.review-ui tbody,
+.review-ui tfoot,
+.review-ui th,
+.review-ui td,
+.review-ui tr {
+  color: #000 !important;
+  background: #fff !important;
+  border-color: #000 !important;
+  border: 1px solid rgba(0,0,0,0.9) !important;
+  border-collapse: collapse !important;
+  padding:6px !important;
+}
+.review-ui table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+.review-ui thead th {
+  background: #f7f7f7 !important;
+  color: #000 !important;
+  font-weight:700 !important;
+}
+
+/* review list items */
+#reviewList > div{
+  background: #fff;
+  color: #000;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Highlighting classes for options after submission (added exactly for your request) */
+.review-option{
+  display:block;
+  padding:10px 12px;
+  border-radius:8px;
+  margin:6px 0;
+  border:1px solid rgba(0,0,0,0.06);
+  background:#fff;
+  color:#000;
+}
+.review-option.correct{
+  background:#dff7df; /* light green */
+  border:1px solid var(--correct);
+  color:#000;
+  font-weight:700;
+}
+.review-option.wrong{
+  background:#ffecec; /* light red */
+  border:1px solid var(--wrong);
+  color:#000;
+  font-weight:700;
+}
+.review-option.selected{
+  outline:2px dashed rgba(0,0,0,0.08);
+}
+.correct-badge{display:inline-block;padding:2px 8px;border-radius:12px;background:var(--correct);color:#000;font-weight:700;margin-left:8px;font-size:12px}
+.wrong-badge{display:inline-block;padding:2px 8px;border-radius:12px;background:var(--wrong);color:#000;font-weight:700;margin-left:8px;font-size:12px}
+
+/* final score display should be black on white */
+#finalScore{
+  color: #000 !important;
+  font-weight:700;
+}
+
+.footer{margin-top:10px;font-size:12px;color:var(--muted);text-align:center}
+.hidden{display:none}
+.modal-overlay{
+  position:fixed; inset:0; background: rgba(0,0,0,0.75);
+  display:flex; align-items:center; justify-content:center; z-index:9999;
+}
+.modal{
+  background:#0b0b0b; padding:28px; border-radius:12px; text-align:center; max-width:420px; width:90%;
+  box-shadow:0 10px 40px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.04);
+}
+.modal h2{color:var(--accent); margin-bottom:8px}
+.modal p{color:#fff; font-size:1.1rem}
+.modal button{margin-top:16px}
+@media (max-width:1000px){.layout{flex-direction:column}.right{order:-1}}
+</style>
+
+<!-- KaTeX -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"
+  onload="if(typeof renderMathInElement==='function'){ renderMathInElement(document.body, { delimiters: [{left:'$$', right:'$$', display:true}, {left:'\\(', right:'\\)', display:false}] }); }">
+</script>
+</head>
+<body>
+<div class="container-wrap">
+  <div class="overlay" aria-hidden="true"></div>
+
+  <div class="card" role="application" aria-label="GATE style mining quiz">
+
+    <!-- WELCOME -->
+    <div id="welcome" class="welcome" aria-live="polite">
+      <div style="text-align:center; margin-bottom:12px;">
+        <img src="https://img1.wsimg.com/isteam/ip/0bf70def-deca-417e-962f-b76f39b1865e/logo.png"
+             alt="Indian Coal Chronicles Logo"
+             style="max-width:100px; height:auto; display:inline-block;"/>
+      </div>
+      <h1>Welcome to Indian Coal Chronicles</h1>
+      <p><strong>GATE - Mining Practice Paper</strong>.</p>
+      <div style="text-align:left;max-width:820px;margin:12px auto;color:var(--muted);">
+        <strong>Instructions:</strong>
+    <ol style="margin-top: 8px; line-height: 1.6;">
+      <li>This paper comprises two sections: <strong>General Aptitude (GA)</strong> and <strong>Mining Subject (MN)</strong>.</li>
+      <li>The duration of the examination is <strong> 3 hours</strong>.</li>
+      <li><strong>Questions 1–10</strong> pertain to General Aptitude, while <strong>Questions 11–65</strong> relate to the Mining Subject, making up a total of <strong>100 marks</strong>.</li>
+      <li>
+        The types of questions included are as follows:
+        <ol type="a" style="margin-top: 4px; margin-left: 32px; list-style-type: lower-alpha;">
+          <li>Multiple Choice Questions <strong>(MCQ)</strong></li>
+          <li>Multiple Select Questions <strong>(MSQ)</strong></li>
+          <li>Numerical Answer Type <strong>(NAT)</strong> questions</li>
+        </ol>
+      </li>
+      <li>Marking Scheme: Each question carries either <strong>1 mark</strong> or <strong>2 marks</strong>.</li>
+      <li>
+        Negative Marking:
+        <ol type="a" style="margin-top: 4px; margin-left: 32px; list-style-type: lower-alpha;">
+          <li>Negative marking applies only to MCQ-type questions.</li>
+          <li>For a 1-mark MCQ, <strong>1/3 mark</strong> will be deducted for each incorrect response.</li>
+          <li>For a 2-mark MCQ, <strong>2/3 mark</strong> will be deducted for each incorrect response.</li>
+          <li><strong>No negative marking</strong> will be applied for incorrect answers to MSQ or NAT questions.</li>
+          <li><strong>No partial marking</strong> is applicable for MSQ questions.</li>
+        </ol>
+      </li>
+    </ol>
+      </div>
+      <button id="startBtn" class="btn ghostt">Start</button>
+    </div>
+
+    <!-- QUIZ UI -->
+<div id="quizUI" class="hidden" aria-hidden="true">
+  <div class="layout">
+    <div class="left">
+      <div class="qmeta">
+        <div class="qnum" id="qnum">Question 1 / 65</div>
+        <div class="timer" id="timer">3:00:00</div>
+      </div>
+
+      <div class="qtext" id="qtext">Loading...</div>
+      <div class="options" id="options" role="group" aria-labelledby="qtext"></div>
+
+      <div class="controls">
+        <div>
+          <button id="clearBtn" class="btn ghost" aria-label="Clear selected option">Clear Response</button>
+          <button id="prevBtn" class="btn ghos" aria-label="Previous question">Previous</button>
+          <button id="nextBtn" class="btn" aria-label="Save and go to next question">Save & Next</button>
+          <!-- Save & Mark for Review button removed as requested -->
+          <button id="reviewNextBtn" class="btn gho" aria-label="Mark for review and go to next">Mark for Review & Next</button>
+        </div>
+
+        <div class="small" id="qmarks">1 mark • MCQ</div>
+      </div>
+
+      <div id="explain" class="small hidden" style="margin-top:10px;background:rgba(0,0,0,0.05);padding:10px;border-radius:8px;color:#000"></div>
+    </div>
+
+    <div class="right">
+      <div>
+        <strong style="color:#fff">Question Palette</strong>
+        <div class="palette" id="palette" aria-live="polite" style="margin-top:8px"></div>
+      </div>
+
+      <!-- Color Legend (kept all items) -->
+      <div class="legend" aria-hidden="false" style="margin-top:12px">
+        <div><span style="background: var(--answered);"></span> Answered <span id="count-answered" class="count answered">(0)</span></div>
+        <div><span style="background: var(--review);"></span> Marked for Review <span id="count-review" class="count review">(0)</span></div>
+        <div><span style="background: var(--not-visited);"></span> Not Visited <span id="count-not-visited" class="count not-visited">(65)</span></div>
+        <div><span style="background: var(--not-answered);"></span> Not Answered <span id="count-not-answered" class="count not-answered">(0)</span></div>
+      </div>
+
+      <div class="submit-area">
+        <div class="result-wrap" id="liveInfo"></div>
+        <button id="submitBtn" class="btn ghostt" style="margin-top:10px">Submit</button>
+      </div>
+
+      <div style="margin-top:12px" class="footer">Indian Coal Chronicles</div>
+    </div>
+  </div>
+</div>
+
+    <!-- REVIEW -->
+    <div id="reviewUI" class="review-ui" aria-hidden="true">
+      <h2 style="color:#000;text-align:center">Exam Completed</h2>
+      <div id="finalScore" style="font-size:1.4rem;text-align:center;margin-top:8px;color:#000"></div>
+      <div id="reviewList" style="margin-top:12px;overflow:auto;padding:8px;border-top:1px solid rgba(0,0,0,0.03)"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* --------------------------
+  Helper funcs + dataset
+--------------------------- */
+
+function marksForQ(qno){
+  if ((qno>=1 && qno<=5) || (qno>=11 && qno<=35)) return 1;
+  if ((qno>=6 && qno<=10) || (qno>=36 && qno<=65)) return 2;
+  return 1;
+}
+function negativeForQ(qno){
+  return marksForQ(qno) === 1 ? (1/3) : (2/3);
+}
+
+/* QUESTIONS — NATs include answerMin/answerMax ranges */
+const QUESTIONS = [
+  {qno:1, section:'GA', type:'mcq', marks:marksForQ(1), question:" If ‘→’ denotes increasing order of intensity, then the meaning of the words  [drizzle → rain → downpour] is analogous to [ ______  → quarrel → feud].  Which one of the given options is appropriate to fill the blank?", options:["bicker","bog","dither","dodge"], answer:0, explanation:" "},
+  {qno:2, section:'GA', type:'mcq', marks:marksForQ(2), question:" Statements:<br>  1. All heroes are winners. <br>  2. All winners are lucky people.  <br>  Inferences: <br>  I. All lucky people are heroes.  <br>  II. Some lucky people are heroes.  <br>  III. Some winners are heroes.  <br>  Which of the above inferences can be logically deduced from statements 1 and 2?  ", options:[" Only I and II  "," Only II and III  "," Only I and III  "," Only III  "], answer:1, explanation:" "},
+  {qno:3, section:'GA', type:'mcq', marks:marksForQ(3), question:"A student was supposed to multiply a positive real number 𝑝 with another positive real number 𝑞. Instead, the student divided 𝑝 by 𝑞. If the percentage error in the student’s answer is 80%, the value of 𝑞 is", options:["5","√2","2","√5"], answer:3, explanation:" "},
+  {qno:4, section:'GA', type:'mcq', marks:marksForQ(4), question:"If the sum of the first 20 consecutive positive odd numbers is divided by 20², the result is", options:["1","20","2","1/2"], answer:0, explanation:" "},
+  {qno:5, section:'GA', type:'mcq', marks:marksForQ(5), question:"The ratio of the number of girls to boys in class VIII is the same as the ratio of the number of boys to girls in class IX. The total number of students (boys and girls) in classes VIII and IX is 450 and 360, respectively. If the number of girls in classes VIII and IX is the same, then the number of girls in each class is", options:["150","200","250","175"], answer:1, explanation:" "},
+  {qno:6, section:'GA', type:'mcq', marks:marksForQ(6), question:"The line ran _______ the page, right through the centre, and divided the page into two.", options:["across","of","between","about"], answer:0, explanation:" "},
+  {qno:7, section:'GA', type:'mcq', marks:marksForQ(7), question:"Kind : ________ : : Often : Seldom (By word meaning)", options:["Cruel","Variety","Type","Kindred"], answer:0, explanation:" "},
+  {qno:8, section:'GA', type:'mcq', marks:marksForQ(8), question:'In how many ways can cells in a 3×3 grid be shaded, such that each row and each column have exactly one shaded cell? An example of one valid shading is shown. <br> <img src="https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q4.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">', options:["2","9","3","6"], answer:3, explanation:" "},
+  {qno:9, section:'GA', type:'mcq', marks:marksForQ(9), question:"There are 4 red, 5 green, and 6 blue balls inside a box. If 𝑁 number of balls are picked simultaneously, what is the smallest value of 𝑁 that guarantees there will be at least two balls of the same colour? One cannot see the colour of the balls until they are picked.", options:["4","15","5","2"], answer:0, explanation:" "},
+  {qno:10, section:'GA', type:'mcq', marks:marksForQ(10), question:'Consider a circle with its centre at the origin (O), as shown. Two operations are allowed on the circle. <br>Operation 1 : Scale independently along the x and y axes. <br>Operation 2 : Rotation in any direction about the origin. <br>Which figure among the options can be achieved through a combination of these two operations on the given circle? <br> <img src=" https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q5-1.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">', options:[ '<br> <img src=" https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q5-2.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">','<br> <img src="https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q5-3.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">','<br> <img src="https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q5-4.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">','<br> <img src="https://raw.githubusercontent.com/indiancoalchronicles/GA1/refs/heads/main/q5-5.png"       alt="Longitudinal section of mined-out stope block"       style="max-width:100px; height:auto;  border-radius:8px; display:block; margin:10px auto;">'], answer:0, explanation:" "},
+  {
+  qno: 11,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(11),
+  question: "The eigenvalues of the matrix \\(A = \\begin{bmatrix}1 & 4\\\\3 & 2\\end{bmatrix}\\) are",
+  options: ["5 and -2", "5 and 2", "-5 and 2", "-5 and -2"],
+  answer: 0,
+  explanation: "Compute the characteristic polynomial: $$det(A - \\lambda I) = \\begin{vmatrix}1-\\lambda & 4 \\\\ 3 & 2-\\lambda\\end{vmatrix} = (1-\\lambda)(2-\\lambda) - 12$$\n\nExpanding: $$\\lambda^2 - 3\\lambda - 10 = 0$$\n\nSolving: \\(\\lambda = \\frac{3 \\pm \\sqrt{9 + 40}}{2} = \\frac{3 \\pm 7}{2}\\).<br><br>Thus, eigenvalues are **5 and -2**."
+},
+{
+  qno: 12, 
+  section: 'MN', 
+  type: 'mcq', 
+  marks: marksForQ(12),
+  question: 'For the electric delay detonator shown in the figure, the components P, Q and R respectively, are<br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.2.jpeg" alt="image loading" style="max-width:490px; height:auto;  border-radius:8px; display:block; margin:10px auto;"> ',
+  options: [
+    "Fuse head, delay element, priming charge",
+    "Fuse head, priming charge, delay element",
+    "Delay element, fuse head, priming charge",
+    "Priming charge, delay element, fuse head"
+  ],
+  answer: 0,
+  explanation: "P is the fuse head (ignition element), Q is the delay element that provides time delay, and R is the priming charge."
+},
+
+{
+  qno: 13,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(13),
+  question: 'Match the following safety arrangements for a surface-to-underground shaft hoist with their corresponding safety functions. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>        <th>Hoisting safety arrangement</th><th>Safety function</th> </tr>    </thead>    <tbody>      <tr><td> P. Detaching hook </td><td> 1. Over-winding safety on surface </td></tr>      <tr><td> Q. Narrowing rigid guides </td><td> 2. Resting cages </td></tr>      <tr><td> R. Keps </td><td> 3. Over-winding safety at underground </td></tr>                </tbody>  </table>',
+  options: [
+    "P-1, Q-3, R-2",
+    "P-2, Q-1, R-3",
+    "P-3, Q-2, R-1",
+    "P-1, Q-2, R-3"
+  ],
+  answer: 0,
+  explanation: "Detaching hook prevents overwind at surface; narrowing rigid guides prevent overwind at underground; keps support/rest cages."
+},
+
+{
+  qno: 14,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(14),
+  question: 'The fore and back bearings of the lines of an open compass traverse are given. The stations that are free from local attraction are: <br><br>\
+  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">\
+    <thead style="background:rgba(255,255,255,0.08);">\
+      <tr>\
+        <th>Line</th>\
+        <th>Fore bearing</th>\
+        <th>Back bearing</th>\
+      </tr>\
+    </thead>\
+    <tbody>\
+      <tr><td>PQ</td><td>\\(132^\\circ\\,30^{\\prime}\\)</td><td>\\(313^\\circ\\,30^{\\prime}\\)</td></tr>\
+      <tr><td>QR</td><td>\\(123^\\circ\\,30^{\\prime}\\)</td><td>\\(303^\\circ\\,30^{\\prime}\\)</td></tr>\
+      <tr><td>RS</td><td>\\(182^\\circ\\,30^{\\prime}\\)</td><td>\\(2^\\circ\\,15^{\\prime}\\)</td></tr>\
+      <tr><td>ST</td><td>\\(288^\\circ\\,45^{\\prime}\\)</td><td>\\(108^\\circ\\,0^{\\prime}\\)</td></tr>\
+    </tbody>\
+  </table>',
+  options: [
+    "P and Q",
+    "Q and R",
+    "R and S",
+    "S and T"
+  ],
+  answer: 1,
+  explanation: "For line QR, the fore bearing 123°30′ and back bearing 303°30′ differ by exactly 180°, indicating no local attraction at stations Q and R."
+},
+
+{
+  qno: 15,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(15),
+  question: "The plane stress condition is given by",
+  options: [
+    "\\(ε_{zz} = 0, γ_{yz} = 0, γ_{zx} = 0\\)",
+    "\\(σ_{zz} = 0, τ_{yz} = 0, τ_{zx} = 0\\)",
+    "\\(σ_{zz} ≠ 0, τ_{yz} ≠ 0, τ_{zx} ≠ 0\\)",
+    "\\(ε_{zz} ≠ 0, γ_{yz} ≠ 0, γ_{zx} ≠ 0\\)"
+  ],
+  answer: 1,
+  explanation: "In plane stress, out-of-plane normal and shear stresses vanish: σzz = 0, τyz = 0, τzx = 0."
+},
+{
+  qno: 16,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(16),
+  question: 'Match the following metals with their corresponding minerals. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>       <th>Metal</th><th>Mineral</th> </tr>    </thead>    <tbody>      <tr><td> P. Copper</td><td> 1. Galena</td></tr>      <tr><td> Q. Tungsten</td><td> 2. Sphalerite</td></tr><tr><td> R. Lead</td><td> 3. Chalcopyrite</td></tr><tr><td> S. Zinc</td><td> 4. Wolframite</td></tr>                 </tbody>  </table>',
+  options: [
+    "P-4, Q-2, R-1, S-3",
+    "P-4, Q-1, R-3, S-2",
+    "P-3, Q-4, R-1, S-2",
+    "P-2, Q-3, R-4, S-1"
+  ],
+  answer: 2,
+  explanation: "Copper → Chalcopyrite (3), Tungsten → Wolframite (4), Lead → Galena (1), Zinc → Sphalerite (2)."
+},
+{
+  qno: 17,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(17),
+  question: 'Match the wire rope types with their corresponding cross-sectional diagrams. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>       <th colspan="2">Rope type</th><th colspan="2">Diagram</th> </tr>    </thead>    <tbody>      <tr><td> P</td><td> Round strand</td><td> 1</td><td><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.7.1.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"></td></tr>  <tr><td> Q</td><td> Half-locked coil</td><td> 2</td><td><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.7.2.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"></td></tr>  <tr><td> R</td><td> Flattened strand</td><td> 3</td><td><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.7.3.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"></td></tr>  <tr><td> S</td><td> Full locked coil</td><td> 4</td><td><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.7.4.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"></td></tr>                 </tbody>  </table>',
+
+  options: [
+    "P-3, Q-2, R-4, S-1",
+    "P-3, Q-1, R-2, S-4",
+    "P-1, Q-3, R-4, S-2",
+    "P-4, Q-2, R-3, S-1"
+  ],
+  answer: 0,
+  explanation: "Round strand → 3, Half-locked coil → 2, Flattened strand → 4, Full locked coil → 1."
+},
+{
+  qno: 18,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(18),
+  question: "The ‘ratchet and pawl’ mechanism in a jack hammer drill",
+  options: [
+    "forces down the piston",
+    "provides a twisting force to the drill steel",
+    "engages rifle bar with rifle nut",
+    "prevents reverse rotation of rifle bar"
+  ],
+  answer: 3,
+  explanation: "The ratchet and pawl mechanism is used to prevent the reverse rotation of the rifle bar in a jack hammer drill."
+},
+{
+  qno: 19,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(19),
+  question: "Post-pillar method of stoping is a variant of",
+  options: [
+    "cut and fill stoping",
+    "sublevel stoping",
+    "vertical crater retreat method",
+    "sublevel caving"
+  ],
+  answer: 1,
+  explanation: "Post-pillar stoping is a modification of sublevel stoping, where pillars are left to support the stope."
+},
+{
+  qno: 20,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(20),
+  question: "‘Cross-measure borehole method’ is used for",
+  options: [
+    "rock slope monitoring",
+    "methane drainage",
+    "connecting two drifts",
+    "subsidence monitoring"
+  ],
+  answer: 1,
+  explanation: "Cross-measure boreholes are drilled across coal beds for effective methane drainage."
+},
+{
+  qno: 21,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(21),
+  question: "The dry and wet bulb temperatures at the inlet of the airstream are 30°C and 25°C, respectively. The corresponding values at the outlet of the airstream are 26°C and 25°C, respectively. The psychrometric process that occurs in the airstreamis",
+  options: [
+    "latent cooling",
+    "sensible cooling",
+    "condensation",
+    "evaporative cooling"
+  ],
+  answer: 1,
+  explanation: "Since temperature drops without moisture change, the process is sensible cooling."
+},
+{
+  qno: 22,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(22),
+  question: "For a mixture of inflammable gases, the lower and upper explosibility limits can be computed using",
+  options: [
+    "Dalton’s law",
+    "Graham’s law",
+    "Le Chatelier relation",
+    "Boyle’s law"
+  ],
+  answer: 2,
+  explanation: "Le Chatelier's relation is used to compute explosive limits of gas mixtures."
+},
+{
+  qno: 23,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(23),
+  question: "The code for the lowest category of mineral resources under the United Nations Framework Classification (UNFC) system is",
+  options: [
+    "444",
+    "123",
+    "334",
+    "111"
+  ],
+  answer: 0,
+  explanation: "In the UNFC classification, 444 represents the lowest level of geological, feasibility, and economic confidence."
+},
+{
+  qno: 24,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(24),
+  question: 'Match the following sampling patterns with the corresponding sampling types. <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.14.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"> <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>       <th>Sampling Pattern</th><th colspan="2">Sampling Type</th> </tr>    </thead>    <tbody>      <tr><td> P</td><td> 1 </td><td>Regular</td></tr>      <tr><td> Q</td><td> 2 </td><td>Biased</td></tr>      <tr><td> R</td><td> 3 </td><td>Stratified random</td></tr>      <tr><td> S</td><td> 4 </td><td>Random</td></tr>      </tbody>  </table>',
+  options: [
+    "P-1, Q-3, R-2, S-4",
+    "P-1, Q-3, R-4, S-2",
+    "P-1, Q-2, R-3, S-4",
+    "P-4, Q-2, R-1, S-3"
+  ],
+  answer: 1,
+  explanation: "Pattern P is uniform (regular), Q is stratified, R is random distribution, and S is biased sampling."
+},
+{
+  qno: 25,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(25),
+  question: "In the context of gas testing using flame safety lamp, the correct statement is:",
+  options: [
+    "Each accumulation test has to be necessarily followed by percentage test",
+    "Accumulation test is always done after percentage test",
+    "Either percentage test or accumulation test can be done first",
+    "Percentage test is done only after accumulation test gives negative result"
+  ],
+  answer: 2,
+  explanation: "Both percentage and accumulation tests are independent; either can be conducted first."
+},
+{
+  qno: 26,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(26),
+  question: "For x in the range of [-3, 3], the maximum value for the function $$f(x) = x^3 - 6x^2 + 9x + 15 \\text{ is _____. (round off to 1 decimal place) }$$",
+  answerMin: 19.0,
+  answerMax: 19.0,
+  explanation: "Critical points at x = 1 and x = 3; evaluating shows maximum f(x) = 19.0 at x = 1."
+},
+{
+  qno: 27,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(27),
+  question: "A rock sample has coefficient of thermal diffusivity 1.282×10⁻⁶ m²/s, specific heat 900 J/(kg°C), and density 2600 kg/m³. The coefficient of thermal conductivity of the rock sample in W/(m°C) is _____. (round off to 1 decimal place)",
+  answerMin: 3.0,
+  answerMax: 3.0,
+  explanation: "k = α ρ c = 1.282e-6 × 2600 × 900 ≈ 3.0 W/m°C."
+},
+{
+  qno: 28,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(28),
+  question: 'A random variable X has the following probability mass function. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      </thead>    <tbody>      <tr><td>x</td><td>3</td><td>6</td><td>8</td><td>12</td></tr>      <tr><td>f(x)</td><td>1/2</td><td>1/4</td><td>1/8</td><td>1/8</td></tr>                 </tbody>  </table><br><br> The expected value of the variable X is _____. (round off to 1 decimal place)',
+  answerMin: 5.5,
+  answerMax: 5.5,
+  explanation: "E[X] = 3(1/2) + 6(1/4) + 8(1/8) + 12(1/8) = 5.5."
+},
+{
+  qno: 29,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(29),
+  question: 'A random sample has five observations as shown below 11, 14, 15, 13, 12. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">         </thead>    <tbody>      <tr><td> 11</td><td> 14</td><td> 15</td><td> 13</td><td> 12</td></tr>      </tbody>  </table><br><br> The coefficient of variation of the sample is _____. (round off to 3 decimal places) ',
+  answerMin: 0.122,
+  answerMax: 0.122,
+  explanation: "Mean=13, sample SD=1.581, CV=1.581/13=0.1216 ≈ 0.122."
+},
+{
+  qno: 30,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(30),
+  question: "Rock strata has unit weight of 25 kN/m³ and Poisson’s ratio 1/3. At depth of 200 m, the horizontal stress in MPa is _____. (round off to 1 decimal place)",
+  answerMin: 2.5,
+  answerMax: 2.5,
+  explanation: "Horizontal stress = K₀ σv with K₀ = ν/(1−ν) = 0.5. So σh = 0.5 × 5 = 2.5 MPa."
+},
+{
+  qno: 31,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(31),
+  question: "A shovel of bucket capacity 4.2 m³ makes 900 passes/day with fill factor 0.8. if the Swell factor of the rock is 1.4. then in-situ volume handled by the shovel in a month of 24 working days in m³  is _____. (round off to 1 decimal place)",
+  answerMin: 51840.0,
+  answerMax: 51840.0,
+  explanation: "Loose volume=3024 m³/day. In-situ=3024/1.4=2160 m³/day. Monthly=2160×24=51840 m³."
+},
+{
+  qno: 32,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(32),
+  question: 'A cylindrical sample of granular material has the following measurements. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      </thead>    <tbody>      <tr><td> Length</td><td> 10 cm</td></tr>      <tr><td> Diameter</td><td> 5 cm</td></tr><tr><td> Weight</td><td> 350 g</td></tr>                 </tbody>  </table><br><br> Assume the sample is completely dry with specific gravity of solid grains 2.8. The Void ratio of the sample is _____. (round off to 3 decimal places) ',
+  answerMin: 0.570,
+  answerMax: 0.570,
+  explanation: "Volume=196.35 cm³, dry density=1.783 g/cc, e=(2.8/1.783)-1=0.570."
+},
+{
+  qno: 33,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(33),
+  question: "The following consecutive staff readings were taken at uniform intervals with a level and a levelling staff on continuously sloping ground. <br><br> 0.405, 1.035, 1.654, 0.240, 0.615, 1.125, 0.800, 1.125<br><br> the number of change points is _____.",
+  answerMin: 2,
+  answerMax: 2,
+  explanation: "A change point occurs when reading suddenly drops after an increasing trend; two such drops occur."
+},
+{
+  qno:34,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(34),
+  question: "the cost of a slurry pump is Rs. 50,000 and it has an estimated life of 7 years. If the salvage value is Rs. 8,000. The annual depreciation following straight-line depreciation method, in Rupees, is _____. (round off to 1 decimal place)",
+  answerMin: 6000.0,
+  answerMax: 6000.0,
+  explanation: "Depreciation=(50000−8000)/7=6000."
+},
+{
+  qno: 35,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(35),
+  question: "In a mine bench, the shovel loading time follows exponential distribution with a mean loading time of 5 min per dumper. The arrival rate of dumpers that are identical in capacity, follows Poisson distribution with a mean arrival rate of 8 per hour. The probability that the shovel remains idle is _____. (round off to 2 decimal places)",
+  answerMin: 0.33,
+  answerMax: 0.33,
+  explanation: "Idle probability = 1 − (λ/μ) = 1 − (8/12) = 0.33."
+},
+{
+  qno: 36,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(36),
+  question: "For \\(w=\\dfrac{e^t - t}{e^t + t}\\), the value of \\(\\dfrac{dw}{dt}\\) is",
+  options: [
+    "\\(\\dfrac{2e^t(t^2+1)}{(e^t-t^2)^2}\\)",
+    "\\(\\dfrac{2e^t(t-1)}{(e^t+t)^2}\\)",
+    "\\(\\dfrac{2e^t(t^2-1)}{(e^t+t^2)^2}\\)",
+    "\\(\\dfrac{2e^t(t+1)}{(e^t-t)^2}\\)"
+  ],
+  answer: 1,
+  explanation: "Differentiate using quotient rule: with u=e^t-t, v=e^t+t, du=(e^t-1)dt, dv=(e^t+1)dt. Numerator = (e^t-1)(e^t+t) - (e^t-t)(e^t+1) = 2e^t(t-1). Hence \\(dw/dt=\\dfrac{2e^t(t-1)}{(e^t+t)^2}\\)."
+},
+{
+  qno: 37,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(37),
+  question: "For the differential equation \\(y\\sqrt{1-x^2}\\,dy + x\\sqrt{1-y^2}\\,dx = 0\\), assuming the constant of integration to be C, the general solution is",
+  options: [
+    "\\(\\dfrac{1}{\\sqrt{1-x^2}} + \\dfrac{1}{\\sqrt{1-y^2}} = C\\)",
+    "\\(y\\sqrt{1-x^2} + x\\sqrt{1-y^2} = C\\)",
+    "\\(\\sqrt{1-x} + \\sqrt{1-y} = C\\)",
+    "\\(\\sqrt{1-x^2} + \\sqrt{1-y^2} = C\\)"
+  ],
+  answer: 3,
+  explanation: "Differentiate \\(\\sqrt{1-x^2} + \\sqrt{1-y^2} = C\\): gives \\(-\\dfrac{x}{\\sqrt{1-x^2}}dx - \\dfrac{y}{\\sqrt{1-y^2}}dy =0\\) → multiply through by \\(\\sqrt{1-x^2}\\sqrt{1-y^2}\\) to obtain the given equation. Thus the solution is \\(\\sqrt{1-x^2}+\\sqrt{1-y^2}=C\\)."
+},
+{
+  qno: 38,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(38),
+  question: "A belt-drive used for power transmission between two parallel shafts has a belt of mass 1.2 kg/m, and the maximum allowable belt tension is 2250 N. If the centrifugal tension is one third of the maximum allowable belt tension, the speed at which maximum power is transmitted by the belt, in m/s, is",
+  options: ["46.48", "38.73", "25.00", "35.36"],
+  answer: 2,
+  explanation: "Centrifugal tension \\(T_c = m v^2\\). Given \\(T_c = T_{max}/3\\) so \\(v=\\sqrt{T_{max}/(3m)} = \\sqrt{2250/(3\\times1.2)}=\\sqrt{625}=25\\) m/s."
+},
+{
+  qno: 39,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(39),
+  question: "An air receiver of volume 0.5 m³ supplies air for charging ANFO. During charging the absolute pressure falls from 900 kPa to 700 kPa. Assuming isothermal process, the volume of air supplied by the receiver at 100 kPa ambient pressure, in m³, is",
+  options: ["1.00", "0.39", "0.64", "4.48"],
+  answer: 0,
+  explanation: "Isothermal: amount of air removed = (P1 - P2) V / (R T). Converted to ambient volume at 100 kPa: V_out = V (P1 - P2)/P_ambient = 0.5*(900-700)/100 = 0.5*2 = 1.00 m³."
+},
+{
+  qno: 40,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(40),
+  question: "A conveyor belt consumes 60 kW power while running at a speed of 3.0 m/s. The angle of lap is 180° and the coefficient of friction between belt and pulley is 0.2. The maximum tension (kN) in the belt is",
+  options: ["21.7", "61.7", "82.9", "42.9"],
+  answer: 3,
+  explanation: "Let T1 and T2 be tight and slack tensions. Power P = (T1−T2) v ⇒ T1−T2 = 60000/3 = 20000 N. Belt friction relation: T1/T2 = e^{μθ} = e^{0.2π} ≈ 1.874. Hence T2 = 20000/(1.874−1) ≈ 22882 N and T1 ≈ 1.874×22882 ≈ 42882 N ≈ 42.9 kN."
+},
+{
+  qno: 41,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(41),
+  question: "A linear programming problem is stated below<br><br>Maximize //(Z = 3x_{1} + 5x_{2}\\)<br><br> subject to, \\(2x_{1} + x_{2} ≤ 8\\) $$ 6x_{1} + 8x_{2} ≤ 30$$ $$x_{1},x_{2} ≥ 0$$ The objective function has",
+  options: ["infinite number of solutions", "unbounded solution", "unique solution", "infeasible solution"],
+  answer: 2,
+  explanation: "Feasible corner points: (0,0), (4,0), (0,3.75) and intersection (3.4,1.2). Evaluating Z gives maximum 18.75 at (0,3.75). Hence a unique optimal solution exists."
+},
+{
+  qno: 42,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(42),
+  question: "An explosive mixture has 80 g of ammonium nitrate \\((NH_{4}NO_{3})\\) and 14 g of fuel oil \\((C_{10}H_{20})\\). The oxygen balance in the mixture is",
+  options: ["surplus by 32 g", "deficient by 24 g", "surplus by 16 g", "deficient by 32 g"],
+  answer: 3,
+  explanation: "NH4NO3 (80 g = 1 mol) on decomposition yields 0.5 mol O2 (available oxidizer) ⇒ available O2 mass = 0.5×32 = 16 g. Fuel C10H20 (14 g = 0.1 mol) requires 15×0.1 = 1.5 mol O2 ⇒ required O2 mass = 1.5×32 = 48 g. Deficiency = 48 − 16 = 32 g (deficient by 32 g)."
+},
+{
+  qno: 43,
+  section: 'MN',
+  type: 'mcq',
+  marks: marksForQ(43),
+  question: "A cylindrical sample of cross-sectional area A, length L, and Young's Modulus E, is subjected to a constant uniaxial load P. Within the elastic limit, the total strain energy stored is",
+  options: ["\\(\\dfrac{2P^2L}{AE}\\)", "\\(\\dfrac{P^2L}{2AE}\\)", "\\(\\dfrac{PL}{A^2E}\\)", "\\(\\dfrac{P^2L}{AE}\\)"],
+  answer: 1,
+  explanation: "Strain energy = work done = 1/2 × P × ΔL, where ΔL = PL/(AE). So energy = (1/2)P(PL/(AE)) = P^2 L /(2AE)."
+},
+{
+  qno: 44,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(44),
+  question: 'A surface-mine production system along with the reliability of the individual components is shown. The system reliability is _____. (round off to 3 decimal places) <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.34.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;">',
+  answerMin: 0.539,
+  answerMax: 0.539,
+  explanation: "Dumpers in parallel: R_par = 1 - (1-0.6)^3 = 1 - 0.064 = 0.936. System in series: 0.9 × 0.8 × 0.936 × 0.8 = 0.539136 ≈ 0.539."
+},
+
+{
+  qno: 45,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(45),
+  question: "The selling price of one rock bolt (in Rs.) is \\(S = (200 − 10 n^{-0.5})\\), where n is the number of bolts produced. The manufacturing cost of the rock bolts has a fixed component of Rs.15000 and variable component of Rs.100 per bolt. The minimum break-even production, in number of bolts, is _____. (round off to 1 decimal place)",
+  answerMin: 151.2,
+  answerMax: 151.2,
+  explanation: "Set revenue = cost: n(200 - 10/√n) = 15000 + 100n ⇒ 100n - 10√n - 15000 = 0. Let x = √n ⇒ 10x^2 - x -1500 = 0 ⇒ x ≈ 12.2975 ⇒ n = x^2 ≈ 151.171 ≈ 151.2."
+},
+{
+  qno: 46,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(46),
+  question: "Two underground mines separated by a horizontal coal barrier 60 m thickness. One mine is inundated, whereas the other mine has a blind heading of dimensions 4.0 m wide and 2.5 m height terminating at the barrier. The overall In-situ shear strength of the coal mass is 500 kPa. Assume that the failure mode is in shear. At a factor of safety 10, the maximum water head that can be withstood by the coal barrier, in m, is _____. (round off to 1 decimal place)",
+  answerMin: 76.4,
+  answerMax: 76.4,
+  explanation: "Allowable shear τ = 500/10 = 50 kPa. Equate hydrostatic force to shear resistance across width: γ_w * h * width = τ * thickness ⇒ h = τ * thickness /(γ_w * width) = 50000*60 /(9810*4) ≈ 76.44 ≈ 76.4 m."
+},
+{
+  qno: 47,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(47),
+  question: "Air enters from ambient atmosphere into a level duct of uniform cross-section area of 0.2 m² at a flow rate of 2.0 m³/s and density of 1.2 kg/m³. The entry shock loss factor is 1.0 and the resistance of the duct per metre length is 1.0 Ns²/m⁸. The static pressure measured at 20 m from the duct entrance, in Pa, is _____. (round off to 1 decimal place)",
+  answerMin: -140.0,
+  answerMax: -140.0,
+  explanation: "Velocity v = Q/A = 10 m/s. Dynamic pressure = 0.5ρv² = 60 Pa. Entry loss = 1×60 = 60 Pa. Friction loss per m = R Q² = 1×(2)² = 4 Pa/m; over 20 m = 80 Pa. Total loss = 60+80 = 140 Pa; static pressure relative to ambient = -140.0 Pa."
+},
+{
+  qno: 48,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(48),
+  question: "A sealed-off air sample consists of 16.0% O₂, 3.0% CO₂, and the rest is N₂. Assume that the standard composition of atmospheric air is 21.0% O₂, and 79.0% N₂. The percentage of blackdamp in the air sample is _____. (round off to 2 decimal places)",
+  answerMin: 23.81,
+  answerMax: 23.81,
+  explanation: "Blackdamp (oxygen deficit) = (21.0 - 16.0)/21.0 ×100% = 5/21 ×100% ≈ 23.8095% ≈ 23.81%."
+},
+{
+  qno: 49,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(49),
+  question: "A diesel loader produces 60 l/s of exhaust containing 5000 ppm of CO. The Incoming air has 10 ppm of CO. The minimum amount of airflow in m³/s that is needed at the loader to dilute CO to a permissible level of 50 ppm is _____. (round off to 1 decimal place)",
+  answerMin: 7.4,
+  answerMax: 7.4,
+  explanation: "Mass-balance: (Q×10 + 0.06×5000)/(Q+0.06)=50 ⇒ 10Q +300 =50Q +3 ⇒ 40Q =297 ⇒ Q ≈ 7.425 m³/s ≈ 7.4 m³/s. (Note 60 L/s = 0.06 m³/s.)"
+},
+{
+  qno: 50,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(50),
+  question: 'The equation for peak particle velocity (PPV) from blast induced ground vibration is given by $$PPV = k (D/√Q)^B \\text { where k and B are site constants.}$$<br><br> In a field study, the following readings are recorded PPV1 = 5.5 mm/s at D1 = 200 m, Q = 100 kg; PPV2 = 3.4 mm/s at D2 = 300 m, Q = 100 kg. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr> <th>Sensor No.</th><th>PPV in mm/s</th>  <th>Sensor distance from blast site (D) in m</th><th>Charge per delay (Q) in kg</th> </tr>    </thead>    <tbody>      <tr><td> 1</td><td> 5.5</td><td> 200</td><td> 100</td></tr>      <tr><td> 2</td><td> 3.4</td><td> 300</td><td> 100</td></tr>    </tbody>  </table><br><br> The value of B is ___. (round off to 3 decimal places) ',
+  answerMin: -1.187,
+  answerMax: -1.187,
+  explanation: "With same Q, PPV ∝ (D)^B. So 5.5/3.4 = (200/300)^B = (2/3)^B. Thus B = ln(5.5/3.4)/ln(2/3) ≈ 0.48120/(-0.405465) ≈ -1.1868 ≈ -1.187."
+},
+{
+  qno: 51,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(51),
+  question: "An underground copper mine sends 2500 tonnes of ore per day to the concentrator plant having an average grade of 1.2% Cu. The plant produces concentrate of 25.0% Cu with a recovery of 93.0%. The solids portion of tailings generated from the plant per day in tonnes is ___. (round off to 1 decimal place)",
+  answerMin: 2388.4,
+  answerMax: 2388.4,
+  explanation: "Feed metal = 2500×0.012 = 30 t Cu. Metal recovered = 0.93×30 = 27.9 t Cu. Concentrate mass = 27.9/0.25 = 111.6 t. Tailings solids = feed mass − concentrate mass = 2500 − 111.6 = 2388.4 t/day."
+},
+{
+  qno: 52,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(52),
+  question: 'A mine gallery is supported by regularly placed roof bolts of 100 kN allowable pull force per bolt. Assuming unit weight of the immediate roof is 25 kN/m³ and immediate roof height is 1.75 m, the factor of safety of the support system is ___. (round off to 2 decimal places) <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.42.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;">',
+  answerMin: 2.29,
+  answerMax: 2.29,
+  explanation: "Self-weight per unit area = γ·h = 25×1.75 = 43.75 kN/m². With 1 m × 1 m tributary area per bolt, load per bolt ≈ 43.75 kN. Factor of safety = allowable / load = 100 / 43.75 ≈ 2.2857 ≈ 2.29."
+},
+{
+  qno: 53,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(53),
+  question: 'The slip circle of radius 30.0 m in an overburden slope is shown with the centre of slip circle at point O. The tension crack is completely filled with water. For one meter width of the slope, the moment exerted by the force of water about O in kN-m is ___. (round off to 1 decimal place) <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.43.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;">',
+  answerMin: 3747.0,
+  answerMax: 3747.0,
+  explanation: "Water pressure on vertical crack (depth 6 m) results in resultant force per metre width F = ½ρg h² = 0.5×1000×9.81×6² ≈ 176.58 kN. Taking the perpendicular distance from O to the resultant as ≈ 30·cos45° ≈ 21.213 m, moment ≈ 176.58×21.213 ≈ 3747.0 kN·m."
+},
+{
+  qno: 54,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(54),
+  question: 'The function values at four points of x are shown in the table. The area under the function, using trapezoidal method, is ___. (round off to 1 decimal place) <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">         </thead>    <tbody>      <tr><td> x</td><td> 2</td><td> 4</td><td> 8</td><td> 9</td></tr>      <tr><td> f(x)</td><td> 8</td><td> 12</td><td> 9</td><td> 10</td></tr>            </tbody>  </table>',
+  answerMin: 71.5,
+  answerMax: 71.5,
+  explanation: "Trapezoidal rule: interval 2→4: (8+12)/2×2 = 20; 4→8: (12+9)/2×4 = 42; 8→9: (9+10)/2×1 = 9.5. Total = 20+42+9.5 = 71.5."
+},
+{
+  qno: 55,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(55),
+  question: "A particle starting from rest moves in a straight line such that after time t (seconds) the acceleration becomes (6 − t/4) cm/s². When the acceleration becomes zero, the velocity of the particle in cm/s is ___. (round off to 1 decimal place)",
+  answerMin: 72.0,
+  answerMax: 72.0,
+  explanation: "Acceleration zero at t = 24 s. Velocity v = ∫0^{24} (6 − t/4) dt = [6t − t²/8]₀^{24} = 144 − 72 = 72.0 cm/s."
+},
+{
+  qno: 56,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(56),
+  question: "A parallelepiped has edge vectors as shown belo. $$\\vec{A} = −4\\hat{i} −10\\hat{j} −\\hat{k}$$  $$\\vec{B} = 7\\hat{i} +9\\hat{j} −2\\hat{k}$$ $$\\vec{C} = 3\\hat{i} +9\\hat{j} +4\\hat{k}$$ The volume of the parallelepiped is ___. (round off to 1 decimal place)",
+  answerMin: 88.0,
+  answerMax: 88.0,
+  explanation: "Volume = |A · (B × C)|. B×C = ⟨54, −34, 36⟩, A·(B×C) = −4·54 + (−10)(−34) + (−1)·36 = 88. Volume = 88.0."
+},
+{
+  qno: 57,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(57),
+  question: 'For a development heading, the blasting parameters are <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">          </thead>    <tbody>      <tr><td> Cross-section</td><td> 6.0 m x 5.0 m</td></tr>      <tr><td> Total number of holes</td><td> 72</td></tr><tr><td> Number of trimmer holes</td><td> 30</td></tr><tr><td> Depth of each hole</td><td> 3.5 m</td></tr><tr><td> Charge per hole (except trimmers)</td><td> 3.5 kg</td></tr><tr><td> Charge per trimmer hole</td><td> 1.8 kg</td></tr><tr><td> Pull per round</td><td>90% of hole depth</td></tr>    </tbody>  </table><br><br> The powder factor for the development round in m³/kg is ___. (round off to 2 decimal places)',
+  answerMin: 0.47,
+  answerMax: 0.47,
+  explanation: "Advance per round = 0.9×3.5 = 3.15 m. Volume = 6×5×3.15 = 94.5 m³. Total charge = 42×3.5 + 30×1.8 =147 +54 =201 kg. Powder factor = 94.5/201 ≈ 0.47 m³/kg."
+},
+{
+  qno: 58,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(58),
+  question: 'The following figure represents the observations from the level survey of an underground gallery. <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.48.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;"> If the reduced level of station A is 100.0 m, the reduced level of station D in m is ___. (round off to 1 decimal place) ',
+  answerMin: 100.9,
+  answerMax: 100.9,
+  explanation: "Assume line of sight (LOS) at I1 is 2.00 m above A: HI_I1 = 100.0 + 2.00 = 102.00 m. Back sight at B = 1.10 → RL_B = 102.00−1.10 = 100.90 m. Foresight at C from I1 = 1.20 → RL_C = 102.00−1.20 = 100.80 m. Move instrument to I2: back sight at C = 1.40 → HI_I2 = RL_C + 1.40 = 100.80+1.40 = 102.20 m. Foresight at D = 1.30 → RL_D = 102.20−1.30 = 100.90 m."
+},
+{
+  qno: 59,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(59),
+  question: 'A tacheometer was setup at station P and the following readings were taken at stations A and B with the staff held vertical and the line of sight horizontal. <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>       <th>Line</th><th>Bearing</th><th>Staff intercept</th> </tr>    </thead>    <tbody>      <tr><td> PA</td><td> \\(210^{\\circ}\\)</td><td>1.2 m</td></tr>      <tr><td> PB</td><td> \\(135^{\\circ}\\)</td><td>1.4 m</td></tr> </tbody>  </table><br><br>The additive and multiplying constants of the tachometer are 0 and 100 respectively. The length of AB in m is ___. (round off to 1 decimal place)',
+  answerMin: 159.1,
+  answerMax: 159.1,
+  explanation: "Distance PA = 100×1.2 = 120 m; PB = 100×1.4 = 140 m. Bearing difference = |210°−135°| = 75°. Using law of cosines: AB = √(120²+140²−2·120·140·cos75°) ≈ 159.09 → 159.1 m."
+},
+{
+  qno: 60,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(60),
+  question: 'The geometry of a simple planar curve (ADB) is shown. The value of the mid-ordinate of the curve in m is ___. (round off to 1 decimal place) <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.50.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;">',
+  answerMin: 250.0,
+  answerMax: 250.0,
+  explanation: "Interpreting the figure as a circular arc subtending 120° at the centre (half-angle 60°). Mid-ordinate (sagitta) = R(1−cos60°) = 500×(1−0.5) = 250.0 m."
+},
+{
+  qno: 61,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(61),
+  question: "A steel cube of side 50 mm is subjected to a uniform pressure of 200 MPa acting on each face. The Young's modulus and Poisson's ratio of the material are 200 GPa and 0.25, respectively. The decrease in the side of the cube in mm is ___. (round off to 3 decimal places)",
+  answerMin: 0.025,
+  answerMax: 0.025,
+  explanation: "Under equal compressive stress σ on all faces, axial strain ε = (σ/E)(1−2ν). With σ=200 MPa, E=200 GPa, ν=0.25 → ε = (200e6/200e9)*(1−0.5)=0.0005. Decrease = L·ε = 0.05 m × 0.0005 = 0.000025 m = 0.025 mm."
+},
+{
+  qno: 62,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(62),
+  question: 'In the figure shown below, the friction coefficient between the block and the inclined plane is 0.2, and all the pulleys are weightless. The weight of the block is 10 N. The minimum force P in Newtons that is needed to slide the block up the inclined plane is ___. (round off to 2 decimal places)<br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.52.jpeg" alt="image loading" style="max-width:290px; height:auto;  border-radius:8px; display:block; margin:10px auto;">',
+  answerMin: 2.12,
+  answerMax: 2.12,
+  explanation: "Block on 45°: downslope component = W sin45 = 10×0.7071 = 7.071 N; normal = W cos45 = 7.071 N; friction = μN = 0.2×7.071 = 1.414 N. Total resistance = 7.071+1.414 = 8.485 N. The rope arrangement provides four supporting segments (4:1 mechanical advantage), so required tension T = 8.485/4 = 2.1213 N. With weightless pulleys P = T ≈ 2.12 N."
+},
+{
+  qno: 63,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(63),
+  question: 'An assignment problem is given with cost matrix: G1:[6,10,5,4], G2:[4,100,6,4], G3:[6,9,6,2], G4:[3,7,6,4] for tasks T1..T4. If only one task can be assigned to one group, the minimum cost of assignment is ___.<table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; text-align:center;">  <tr>    <th style="position:relative; width:200px; height:90px; padding:0;">      <!-- Inline SVG covers the entire cell -->      <svg viewBox="0 0 100 100" preserveAspectRatio="none"           style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">        <line x1="0" y1="0" x2="100" y2="100"              stroke="black" stroke-width="2" stroke-linecap="square"/>      </svg>     <!-- Text in bottom-left -->      <div style="position:absolute; bottom:6px; left:6px; pointer-events:auto;">        Group      </div>      <!-- Text in top-right -->      <div style="position:absolute; top:6px; right:6px; pointer-events:auto;">        Task      </div>    </th> <th>T1</th>    <th>T2</th>    <th>T3</th>    <th>T4</th>  </tr>  <tr><th>G1</th><td>6</td><td>10</td><td>5</td><td>4</td>  </tr>  <tr><th>G2</th><td>4</td><td>100</td><td>6</td><td>4</td>  </tr>  <tr><th>G3</th><td>6</td><td>9</td><td>6</td><td>2</td>  </tr>  <tr><th>G4</th><td>3</td><td>7</td><td>6</td><td>4</td>  </tr></table>',
+  answerMin: 18,
+  answerMax: 18,
+  explanation: "Optimal assignment: G2→T1 (4), G4→T2 (7), G1→T3 (5), G3→T4 (2). Total cost = 4+7+5+2 = 18."
+},
+{
+  qno: 64,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(64),
+  question: 'A vertical stoping block length 60.0 m, height 40.0 m, average width 1.5 m has sharp boundary walls. Mining width is 2.0 m. Tonnage factors: ore 3.0 tonne/m³, wall rock 2.5 tonne/m³. Average grade of ore is 10.0%. The overall grade of ore mined on account of dilution in percentage is ___. (round off to 2 decimal places) <br><br>  <table border="1" cellspacing="0" cellpadding="6" style="border-collapse:collapse; width:480px; text-align:center; background:rgba(255,255,255,0.03); color:#fff; border:1px solid rgba(255,255,255,0.1);">    <thead style="background:rgba(255,255,255,0.08);">      <tr>        <th> </th> <th>Igneous / Sedimentary rock</th><th></th>  <th>Metamorphic rock</th>        </tr>    </thead>    <tbody>      <tr><td> P </td><td> Granite </td><td> I </td><td>Quartzite </td></tr>      <tr><td> Q </td><td> Limestone </td><td> II </td><td>Gneiss </td></tr><tr><td> R </td><td> Sandstone </td><td> III </td><td>Schist </td></tr><tr><td> S </td><td> Gabbro </td><td> IV</td><td>Marble </td></tr>          </tbody>  </table> ',
+  answerMin: 7.83,
+  answerMax: 7.83,
+  explanation: "Ore volume = 60×40×1.5 = 3600 m³ → ore mass = 3600×3.0 = 10800 t. Mined volume = 60×40×2.0 = 4800 m³ → mined mass = ore mass + wall mass; wall volume = 1200 m³ → wall mass = 1200×2.5 = 3000 t. Metal = 10800×0.10 = 1080 t. Overall grade = 1080/(10800+3000) = 1080/13800 ≈ 0.07826 = 7.83%."
+},
+{
+  qno: 65,
+  section: 'MN',
+  type: 'nat',
+  marks: marksForQ(65),
+  question: 'A bauxite ore body has four boreholes as shown below. For each boreholem the grade of alumina, the thickness of the ore body, and the triangular area of influence are as shown. <br><br><img src="https://raw.githubusercontent.com/indiancoalchronicles/mining1/refs/heads/main/2020.55.jpeg" alt="image loading" style="max-width:490px; height:auto;  border-radius:8px; display:block; margin:10px auto;"><br><br> The average grade of the ore body in region ABCD in percentage is ___. (round off to 1 decimal place)',
+  answerMin: 30.8,
+  answerMax: 31.6,
+  explanation: "With equal influence areas the mass is proportional to thickness. Weighted average = (30×10 + 35×12 + 25×8 + 32×8) / (10+12+8+8) = 1176 / 38 ≈ 30.947 ≈ 30.9%."
+}
+
+];
+
+/* STATE */
+let state = {
+  started: false,
+  remainingSec: 180 * 60,
+  timerInterval: null,
+  currentIndex: 0,
+  answers: new Array(QUESTIONS.length).fill(null),
+  review: new Array(QUESTIONS.length).fill(false),
+  visited: new Array(QUESTIONS.length).fill(false),
+  submitted: false
+};
+
+/* DOM refs */
+const welcomeEl = document.getElementById('welcome');
+const startBtn = document.getElementById('startBtn');
+const quizUI = document.getElementById('quizUI');
+const qnumEl = document.getElementById('qnum');
+const qtextEl = document.getElementById('qtext');
+const optionsEl = document.getElementById('options');
+const timerEl = document.getElementById('timer');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const clearBtn = document.getElementById('clearBtn');
+const reviewNextBtn = document.getElementById('reviewNextBtn');
+const qmarksEl = document.getElementById('qmarks');
+const paletteEl = document.getElementById('palette');
+const submitBtn = document.getElementById('submitBtn');
+const liveInfo = document.getElementById('liveInfo');
+const explainEl = document.getElementById('explain');
+const reviewUI = document.getElementById('reviewUI');
+const finalScoreEl = document.getElementById('finalScore');
+const reviewListEl = document.getElementById('reviewList');
+
+const countAnsweredEl = document.getElementById('count-answered');
+const countNotAnsweredEl = document.getElementById('count-not-answered');
+const countNotVisitedEl = document.getElementById('count-not-visited');
+const countReviewEl = document.getElementById('count-review');
+
+/* TIMER */
+function formatTime(sec){
+  const h = String(Math.floor(sec/3600)).padStart(2,'0');
+  const m = String(Math.floor((sec%3600)/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  return `${h}:${m}:${s}`;
+}
+function startTimer(){
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  const endTime = Date.now() + state.remainingSec * 1000;
+  state.timerInterval = setInterval(() => {
+    const now = Date.now();
+    state.remainingSec = Math.max(0, Math.round((endTime - now) / 1000));
+    timerEl.textContent = formatTime(state.remainingSec);
+    if (state.remainingSec <= 0){
+      clearInterval(state.timerInterval);
+      showSubmissionModal('Time is up — the exam will be submitted automatically.', submitExam, true);
+    }
+  }, 1000);
+}
+
+/* PALETTE + STATE UPDATES */
+function buildPalette(){
+  paletteEl.innerHTML = "";
+  QUESTIONS.forEach((q,i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'pmini';
+    btn.dataset.index = i;
+    btn.setAttribute('aria-label', 'Question ' + (i+1));
+    btn.textContent = i+1;
+    btn.addEventListener('click', ()=> {
+      saveAnswer();
+      gotoQuestion(i);
+    });
+    paletteEl.appendChild(btn);
+  });
+  updatePaletteState();
+}
+function updatePaletteState(){
+  paletteEl.querySelectorAll('.pmini').forEach(btn => {
+    const i = Number(btn.dataset.index);
+    btn.classList.remove('answered','not-answered','review','active');
+    btn.removeAttribute('aria-pressed');
+    if (i === state.currentIndex){
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
+    }
+    if (state.review[i]) btn.classList.add('review');
+    if (!state.visited[i]) btn.style.background = '';
+    else {
+      if (state.answers[i] !== null && state.answers[i] !== undefined) btn.classList.add('answered');
+      else btn.classList.add('not-answered');
+    }
+  });
+
+  let answeredCount = state.answers.filter(a=>a!==null && a!==undefined).length;
+  let notVisitedCount = state.visited.filter(v=>!v).length;
+  let notAnsweredCount = state.visited.filter((v,i)=>v && (state.answers[i]===null || state.answers[i]===undefined)).length;
+  let reviewCount = state.review.filter(Boolean).length;
+
+  if (countAnsweredEl) countAnsweredEl.textContent = `(${answeredCount})`;
+  if (countNotAnsweredEl) countNotAnsweredEl.textContent = `(${notAnsweredCount})`;
+  if (countNotVisitedEl) countNotVisitedEl.textContent = `(${notVisitedCount})`;
+  if (countReviewEl) countReviewEl.textContent = `(${reviewCount})`;
+}
+
+/* NAVIGATION */
+function gotoQuestion(index){
+  if (index < 0) index = 0;
+  if (index >= QUESTIONS.length) index = QUESTIONS.length - 1;
+  state.currentIndex = index;
+  state.visited[index] = true;
+  renderQuestion();
+  updatePaletteState();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* RENDER */
+function renderQuestion(){
+  if (!state.started){ state.started = true; startTimer(); }
+
+  const q = QUESTIONS[state.currentIndex];
+  qnumEl.textContent = `Question ${q.qno} / ${QUESTIONS.length}`;
+  qtextEl.innerHTML = q.question;
+  qmarksEl.textContent = `${q.marks} mark${q.marks>1?'s':''} • ${q.type.toUpperCase()}`;
+
+  explainEl.classList.add('hidden');
+  explainEl.textContent = '';
+
+  optionsEl.innerHTML = '';
+
+  // lazy images inside qtext
+  qtextEl.querySelectorAll('img').forEach(img => {
+    try{ img.loading='lazy'; img.decoding='async'; img.referrerPolicy='no-referrer'; if(!img.alt) img.alt='Figure for question '+q.qno; }catch(e){}
+  });
+
+  if (q.type === 'mcq'){
+    q.options.forEach((opt, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'opt';
+      const inputId = `opt_${state.currentIndex}_${idx}`;
+      wrap.innerHTML = `<input type="radio" id="${inputId}" name="opt" value="${idx}"><label for="${inputId}">${opt}</label>`;
+      wrap.addEventListener('click', ()=> {
+        optionsEl.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+        wrap.classList.add('selected');
+        const radio = document.getElementById(inputId);
+        if (radio) radio.checked = true;
+      });
+      optionsEl.appendChild(wrap);
+    });
+    const a = state.answers[state.currentIndex];
+    if (a !== null && typeof a === 'number'){
+      const el = document.getElementById(`opt_${state.currentIndex}_${a}`);
+      if (el){ el.checked = true; el.parentElement.classList.add('selected'); }
+    }
+  } else if (q.type === 'msq'){
+    q.options.forEach((opt, idx) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'opt';
+      const inputId = `ms_${state.currentIndex}_${idx}`;
+      wrap.innerHTML = `<input type="checkbox" id="${inputId}" name="optms" value="${idx}"><label for="${inputId}">${opt}</label>`;
+      wrap.addEventListener('click', ()=> {
+        wrap.classList.toggle('selected');
+        const cb = wrap.querySelector('input');
+        cb.checked = !cb.checked;
+      });
+      optionsEl.appendChild(wrap);
+    });
+    const a = state.answers[state.currentIndex];
+    if (Array.isArray(a)){
+      a.forEach(i => {
+        const el = document.getElementById(`ms_${state.currentIndex}_${i}`);
+        if (el){ el.checked = true; el.parentElement.classList.add('selected'); }
+      });
+    }
+  } else if (q.type === 'nat'){
+    const wrap = document.createElement('div');
+    wrap.className = 'opt';
+    const inputId = `nat_${state.currentIndex}`;
+    wrap.innerHTML = `<input id="${inputId}" type="number" step="any" style="width:160px;padding:8px;border-radius:6px;border:none;background:transparent;color:#000" placeholder="Enter numeric answer">`;
+    optionsEl.appendChild(wrap);
+    const a = state.answers[state.currentIndex];
+    if (a !== null && a !== undefined){
+      document.getElementById(inputId).value = a;
+    }
+  }
+
+  updatePaletteState();
+
+  if (typeof renderMathInElement === "function") {
+    try {
+      renderMathInElement(qtextEl, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }] });
+      renderMathInElement(optionsEl, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "\\(", right: "\\)", display: false }] });
+    } catch(e){}
+  }
+}
+
+/* SAVE/CLEAR/BUTTON ACTIONS */
+function saveAnswer(){
+  const q = QUESTIONS[state.currentIndex];
+  if (q.type === 'mcq'){
+    const el = optionsEl.querySelector(`input[type="radio"]:checked`);
+    state.answers[state.currentIndex] = el ? Number(el.value) : null;
+  } else if (q.type === 'msq'){
+    const checked = Array.from(optionsEl.querySelectorAll(`input[type="checkbox"]:checked`)).map(x=>Number(x.value));
+    state.answers[state.currentIndex] = checked.length ? checked : null;
+  } else if (q.type === 'nat'){
+    const el = document.getElementById(`nat_${state.currentIndex}`);
+    if (!el) { state.answers[state.currentIndex] = null; return; }
+    const v = el.value;
+    state.answers[state.currentIndex] = (v === '') ? null : Number(v);
+  }
+  state.visited[state.currentIndex] = true;
+  updatePaletteState();
+  liveInfo.textContent = 'Answers Saved';
+}
+clearBtn.addEventListener('click', () => {
+  state.answers[state.currentIndex] = null;
+  state.review[state.currentIndex] = false;
+  state.visited[state.currentIndex] = true;
+  document.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('selected');
+    const inp = o.querySelector('input');
+    if (inp) inp.checked = false;
+  });
+  const nat = document.getElementById(`nat_${state.currentIndex}`);
+  if (nat) nat.value = '';
+  updatePaletteState();
+});
+prevBtn.addEventListener('click', () => { saveAnswer(); gotoQuestion(state.currentIndex - 1); });
+nextBtn.addEventListener('click', () => { saveAnswer(); gotoQuestion(state.currentIndex + 1); });
+reviewNextBtn.addEventListener('click', () => { saveAnswer(); state.review[state.currentIndex] = true; state.visited[state.currentIndex] = true; gotoQuestion(state.currentIndex + 1); updatePaletteState(); });
+
+/* CORRECTNESS */
+function isCorrect(idx){
+  const q = QUESTIONS[idx];
+  const ans = state.answers[idx];
+  if (ans === null || ans === undefined) return false;
+  if (q.type === 'mcq'){
+    return ans === q.answer;
+  } else if (q.type === 'msq'){
+    const correct = new Set(q.answerMulti || []);
+    const user = new Set(Array.isArray(ans) ? ans : []);
+    if (user.size !== correct.size) return false;
+    for (let v of correct) if (!user.has(v)) return false;
+    return true;
+  } else if (q.type === 'nat'){
+    const user = Number(ans);
+    if (isNaN(user)) return false;
+    if (q.answerMin !== undefined && q.answerMax !== undefined) return user >= q.answerMin && user <= q.answerMax;
+    if (q.answerNum !== undefined) return Math.abs(user - Number(q.answerNum)) <= 1e-6;
+    return false;
+  }
+  return false;
+}
+
+/* SCORING */
+function computeScore(){
+  let total = 0;
+  for (let i=0;i<QUESTIONS.length;i++){
+    const q = QUESTIONS[i];
+    const a = state.answers[i];
+    if (a === null || a === undefined) continue;
+    if (q.type === 'mcq'){
+      if (a === q.answer) total += q.marks;
+      else total -= negativeForQ(q.qno);
+    } else if (q.type === 'msq'){
+      if (isCorrect(i)) total += q.marks;
+    } else if (q.type === 'nat'){
+      if (isCorrect(i)) total += q.marks;
+    }
+  }
+  total = Math.round((total + Number.EPSILON) * 100) / 100;
+  if (total < 0) total = 0;
+  return total;
+}
+function maxPossibleScore(){
+  return QUESTIONS.reduce((s,q)=> s + q.marks, 0);
+}
+
+/* SUBMIT & REVIEW (with highlighting) */
+submitBtn.addEventListener('click', ()=> {
+  if (!confirm('Submit exam now? You will not be able to change answers after submitting.')) return;
+  saveAnswer();
+  submitExam();
+});
+
+function showSubmissionModal(message, actionFn, autoAction=false){
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `<h2>Exam Submission</h2><p style="margin-top:8px">${message}</p>`;
+  const btn = document.createElement('button');
+  btn.className = 'btn ghostt';
+  btn.textContent = 'View Results';
+  btn.addEventListener('click', () => { overlay.remove(); actionFn(); });
+  modal.appendChild(btn);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  if (autoAction){
+    setTimeout(()=> { if (overlay.parentNode) overlay.remove(); actionFn(); }, 1200);
+  }
+}
+
+function submitExam(){
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.submitted = true;
+  const score = computeScore();
+  const maxScore = maxPossibleScore();
+
+  document.getElementById('quizUI').classList.add('hidden');
+  reviewUI.style.display = 'block';
+  reviewUI.setAttribute('aria-hidden', 'false');
+
+  finalScoreEl.textContent = `Your Final Score: ${score.toFixed(2)} / ${maxScore}  (${Math.round((score/maxScore)*10000)/100}%)`;
+
+  reviewListEl.innerHTML = '';
+  QUESTIONS.forEach((q, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'rwrap';
+
+    const title = document.createElement('div');
+    title.innerHTML = `<strong>Q${q.qno} (${q.type.toUpperCase()}, ${q.marks}m) — ${q.section}</strong>`;
+    wrap.appendChild(title);
+
+    const qt = document.createElement('div');
+    qt.style.margin = '6px 0';
+    qt.innerHTML = q.question;
+    // ensure images lazy
+    qt.querySelectorAll && qt.querySelectorAll('img').forEach(img => {
+      try { img.loading = 'lazy'; img.decoding='async'; img.referrerPolicy='no-referrer'; if(!img.alt) img.alt='Figure for question ' + q.qno; } catch(e){}
+    });
+    wrap.appendChild(qt);
+
+    // display options with correct/wrong highlighting
+    if (q.type === 'mcq' || q.type === 'msq'){
+      const container = document.createElement('div');
+      // for mcq: q.answer is 0-based index; for msq: q.answerMulti array
+      const userAns = state.answers[i];
+      const correctSet = (q.type === 'mcq') ? new Set([q.answer]) : new Set(q.answerMulti || []);
+      // create option elements
+      q.options.forEach((opt, idx) => {
+        const optDiv = document.createElement('div');
+        optDiv.className = 'review-option';
+        // mark correct
+        if (correctSet.has(idx)) optDiv.classList.add('correct');
+        // mark wrong selected by user (user selected but not correct)
+        const userSelected = (q.type === 'mcq') ? (userAns === idx) : (Array.isArray(userAns) && userAns.includes(idx));
+        if (userSelected && !correctSet.has(idx)) optDiv.classList.add('wrong');
+        // if user selected and correct, also add selected class (visual emphasis)
+        if (userSelected) optDiv.classList.add('selected');
+        // contents: label + option HTML (options may contain images/HTML)
+        // disable inputs: show a visual indicator icon
+        let marker = '';
+        if (correctSet.has(idx)) marker = `<span class="correct-badge">Correct</span>`;
+        else if (userSelected) marker = `<span class="wrong-badge">Your choice</span>`;
+        optDiv.innerHTML = `<div style="display:flex;align-items:center;gap:12px"><div style="flex:1">${String.fromCharCode(65+idx)}. ${opt}</div><div>${marker}</div></div>`;
+        container.appendChild(optDiv);
+      });
+      wrap.appendChild(container);
+    } else if (q.type === 'nat'){
+      const p = document.createElement('div');
+      const correctText = (q.answerNum !== undefined) ? q.answerNum : ((q.answerMin !== undefined && q.answerMax !== undefined) ? `${q.answerMin} to ${q.answerMax}` : 'N/A');
+      p.innerHTML = `<strong>Correct:</strong> ${correctText} &nbsp;&nbsp; <strong>Your answer:</strong> ${state.answers[i] !== null && state.answers[i] !== undefined ? state.answers[i] : 'No answer'}`;
+      wrap.appendChild(p);
+    }
+
+    if (q.explanation){
+      const ex = document.createElement('div');
+      ex.style.marginTop = '6px';
+      ex.style.color = '#444';
+      ex.innerHTML = `Explanation: ${q.explanation}`;
+      wrap.appendChild(ex);
+    }
+
+    reviewListEl.appendChild(wrap);
+  });
+
+  if (typeof renderMathInElement === "function") {
+    try {
+      renderMathInElement(reviewListEl, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\(", right: "\\)", display: false }
+        ]
+      });
+    } catch(e) { }
+  }
+
+  showSubmissionModal(`You scored ${score.toFixed(2)} out of ${maxScore}.`, ()=> {
+    finalScoreEl.scrollIntoView({behavior:'smooth'});
+  }, false);
+}
+
+/* START & NAV */
+startBtn.addEventListener('click', ()=>{ welcomeEl.classList.add('hidden'); quizUI.classList.remove('hidden'); quizUI.setAttribute('aria-hidden','false'); buildPalette(); gotoQuestion(0); timerEl.textContent = formatTime(state.remainingSec); startTimer(); });
+window.addEventListener('keydown', (e)=>{ if (state.submitted) return; if (e.key === 'ArrowLeft'){ saveAnswer(); gotoQuestion(state.currentIndex - 1); } if (e.key === 'ArrowRight'){ saveAnswer(); gotoQuestion(state.currentIndex + 1); } });
+
+/* minimal init */
+(function init(){ /* if you have saved state restore here */ })();
+</script>
+</body>
+</html>
